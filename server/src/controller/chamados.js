@@ -13,9 +13,11 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const { os, description, opening_date, schedule_date, ending_date, status } = req.body
+    const { os, description, opening_date, schedule_date, ending_date, status, created_by } = req.body
 
-    chamados_model.create({ os, description, opening_date, schedule_date, ending_date, status }, (err, response) => {
+    chamados_model.create({
+        os, description, opening_date, schedule_date, ending_date, status, created_by
+    }, (err, response) => {
         if (err) {
             console.error(err)
             res.send(err)

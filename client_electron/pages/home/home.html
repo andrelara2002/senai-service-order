@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+
+    <script src="../../services/chamados_api.js"'></script>
+    <script src="./index.js" defer></script>
+    <title>Chamados</title>
+</head>
+
+<body>
+    <header>
+        <img src="../../src/img/senai.jpeg" alt="">
+        <div class="user">
+            <strong>Olá, </strong>
+            <p id="username">2020010</p>
+            <button id="exit_button">sair</button>
+        </div>
+    </header>
+    <section class="main">
+        <section id="chamados" class="card">
+            <h1>Chamados</h1>
+            <p>Historico de chamados</p>
+            <ul id="lista_chamados"></ul>
+        </section>
+        <section id="report" class="card">
+            <h1>Reports</h1>
+            <div class="form">
+                <div class="question">
+                    <label>Descrição</label>
+                    <textarea id="descricao_chamado" placeholder="Digitar descrição do chamado"></textarea>
+                </div>
+                <div class="question">
+                    <label>Data Programada</label>
+                    <input id="report_date" type="date">
+                </div>
+                <button id="create_chamado">Abrir chamado</button>
+            </div>
+        </section>
+    </section>
+</body>
+
+</html>

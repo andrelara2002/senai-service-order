@@ -2,6 +2,7 @@ const chamadosApi = new ChamadosApi()
 
 
 let _data_ = []
+let user = undefined
 
 const descricao_chamado = document.getElementById('descricao_chamado')
 const create_chamado = document.getElementById('create_chamado')
@@ -13,16 +14,22 @@ create_chamado.addEventListener('click', () => {
     chamadosApi.createData({
         description: descricao_chamado.value,
         os: _data_.length,
-        schedule_date: report_date.value
+        schedule_date: report_date.value,
+        created_by: user.username
     }, res => {
         descricao_chamado.value = ''
         report_date.value = ''
     })
 })
 
+document.getElementById('exit_button').addEventListener('click', () => {
+    localStorage.removeItem('user')
+})
+
 
 const closePopup = () => {
     const body = document.querySelector('body')
+    body.removeChild(document.querySelector('.background'))
     body.removeChild(document.getElementById('update_popup'))
 }
 
@@ -41,6 +48,9 @@ const popup = data => {
     const body = document.querySelector('body')
 
     const update_popup = document.createElement('span')
+    const background = document.createElement('div')
+
+    background.className = 'background'
     update_popup.id = 'update_popup'
 
     update_popup.innerHTML = `
@@ -59,16 +69,28 @@ const popup = data => {
                 <input type='date' value='${parseDate(data.schedule_date)}'></input>
             </div>
         </div>
-        <div class='buttons'>
+        <div class='buttons ${data.created_by == user.username ? '' : 'hidden'}' >
         <button onclick=''>Excluir chamado</button>
             <button class='finished'>${data.status !== 3 ? 'Finalizar chamado' : 'Atualizar chamado'}</button>
         </div>
         <button onclick='closePopup()'>Cancelar</button>
     `
+    body.appendChild(background)
     body.appendChild(update_popup)
+
+    document.querySelector('.background').addEventListener('click', () => {
+        closePopup()
+    })
 }
 
 const getData = async (callback) => {
+    user = JSON.parse(localStorage.getItem('user'))
+
+    if (!user) {
+        window.location.href = '/pages/login/login.html'
+    }
+    document.getElementById('username').innerText = user.name
+
     chamadosApi.fetchData(res => {
 
         const [data, error] = res

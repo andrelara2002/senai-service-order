@@ -3,7 +3,7 @@ const schema = new mongoose.Schema({
     os: { type: String, required: false },
     description: String,
     opening_date: { type: Date, required: true, default: Date.now() },
-    schedule_date: {type: Date, default: Date.now()},
+    schedule_date: { type: Date, default: Date.now() },
     ending_date: Date,
     status: {
         type: Number, default: 0, required: true
@@ -13,7 +13,8 @@ const schema = new mongoose.Schema({
         - 2: in progress
         - 3: finished 
         */
-    }
+    },
+    created_by: String
 })
 
 const model = mongoose.model('chamados', schema)

@@ -24,9 +24,6 @@ let connected = 0;
 app.use(cors())
 app.use(bodyParser.json())
 
-
-
-
 app.listen(PORT)
     .on('listening', () => {
         console.log('server is up')

@@ -15,6 +15,11 @@
 <body>
     <header>
         <img src="/src/img/senai.jpeg" alt="">
+        <div class="user">
+            <strong>Olá, </strong>
+            <p id="username">2020010</p>
+            <button id="exit_button">sair</button>
+        </div>
     </header>
     <section class="main">
         <section id="chamados" class="card">
@@ -29,7 +34,10 @@
                     <label>Descrição</label>
                     <textarea id="descricao_chamado" placeholder="Digitar descrição do chamado"></textarea>
                 </div>
-                <input id="report_date" type="date">
+                <div class="question">
+                    <label>Data Programada</label>
+                    <input id="report_date" type="date">
+                </div>
                 <button id="create_chamado">Abrir chamado</button>
             </div>
         </section>

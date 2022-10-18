@@ -12,7 +12,8 @@ const schema = new mongoose.Schema({
       - 2: Professor
   */
   oficina: String,
-  email: String
+  email: String,
+  name: String
 })
 
 const orderModel = mongoose.model('user', schema)
