@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" ></script>
     <script src="/services/chamados_api.js"></script>
     <script src="./index.js" defer></script>
     <title>Chamados</title>
@@ -21,6 +21,9 @@
             <button id="exit_button">sair</button>
         </div>
     </header>
+    <section class="notification hidden">
+        <strong>Novo chamado registrado <button id="chamado_button" href="#">Verficar</button></strong>
+    </section>
     <section class="main">
         <section id="chamados" class="card">
             <h1>Chamados</h1>

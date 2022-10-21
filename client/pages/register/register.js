@@ -16,12 +16,20 @@ submit_button && submit_button.addEventListener('click', () => {
 
     const body = { username, password, email, name, tipo: '', oficina: '' }
 
-    
+
     userApi.registerUser(body, (
-        res => {
+        async res => {
             const [response, error] = res
+
+            let response_ = await response.json()
+            response_ = response_.response
+            console.log(response_)
+
             if (error) {
                 console.error(error)
+            }
+            else if (response_ == 'USUARIO JA CADASTRADO') {
+                alert('Usuario ja cadastrado')
             }
             else {
                 localStorage.setItem('user', JSON.stringify(body))

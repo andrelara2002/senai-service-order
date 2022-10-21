@@ -21,14 +21,12 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding: 10px 20px;
     gap: 10px;
     margin: 0;
     line-height: 0;
     color: #4d4d4d;
-}
 
-.user:hover{
 }
 
 
@@ -81,6 +79,8 @@ html {
     margin: 0;
     display: flex;
     flex-direction: column;
+    background: #fff;
+    background-image: url('/src/img/Contour Line.svg');
 }
 
 body {
@@ -92,7 +92,15 @@ body {
 
 header {
     box-shadow: -2px 6px 56px -29px rgba(0, 0, 0, 0.38);
-    padding: 1rem;
+    padding: .4rem 1rem;
+    background: #fff;
+}
+
+header button {
+    padding: .4rem 1rem;
+    text-transform: uppercase;
+    font-size: .8rem;
+    letter-spacing: 2px;
 }
 
 
@@ -302,6 +310,26 @@ ul {
 
 }
 
-.hidden{
+
+.notification {
+    width: 100%;
+    padding: 5px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: var(--red);
+    color: white;
+}
+
+.notification Button {
+    padding: 5px 10px;
+}
+
+.notification button:hover{
+    border-color: white;
+}
+
+.notification.hidden, .hidden{
     display: none;
 }

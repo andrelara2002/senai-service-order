@@ -2,21 +2,33 @@ const chamadosApi = new ChamadosApi()
 
 
 let _data_ = []
+let new_data = []
 let user = undefined
+let update_count = 0
 
 const descricao_chamado = document.getElementById('descricao_chamado')
 const create_chamado = document.getElementById('create_chamado')
 const lista_chamados = document.getElementById('lista_chamados')
 const report_date = document.getElementById('report_date')
 
+const chamado_button = document.getElementById('chamado_button')
 
 create_chamado.addEventListener('click', () => {
+    let possible_date = new Date()
+    possible_date.setDate(possible_date.getDate() + 15)
+
     chamadosApi.createData({
         description: descricao_chamado.value,
         os: _data_.length,
-        schedule_date: report_date.value,
+        schedule_date: report_date.value || possible_date,
         created_by: user.username
     }, res => {
+        sendEmail({
+            description: descricao_chamado.value,
+            os: _data_.length,
+            schedule_date: report_date.value || possible_date,
+            created_by: user.username
+        })
         descricao_chamado.value = ''
         report_date.value = ''
     })
@@ -86,9 +98,8 @@ const popup = data => {
 const getData = async (callback) => {
     user = JSON.parse(localStorage.getItem('user'))
 
-    if (!user) {
-        window.location.href = '/pages/login/login.html'
-    }
+    if (!user) window.location.href = '/pages/login/login.html'
+
     document.getElementById('username').innerText = user.name
 
     chamadosApi.fetchData(res => {
@@ -96,6 +107,14 @@ const getData = async (callback) => {
         const [data, error] = res
 
         if (error) { console.error(error); return }
+
+        new_data = data.filter(x => !_data_.find(y => y._id == x._id))
+
+        if (new_data.length > 0 && update_count !== 0) {
+            toggleNotifcation(new_data[0])
+            console.table(new_data)
+        }
+
         _data_ = data
 
         lista_chamados.innerHTML = ''
@@ -141,8 +160,50 @@ const getData = async (callback) => {
                 popup(value)
             })
         })
+
+        update_count++
     })
+
 }
+
+
+const toggleNotifcation = item => {
+    const component = document.querySelector('.notification')
+    if (!component) { console.error('No Notification Found'); return }
+
+
+    component.className = `notification ${item ? '' : 'hidden'}`
+
+    chamado_button.onclick = () => {
+        popup(item)
+        component.className = 'notification hidden'
+    }
+}
+
+
+const sendEmail = ({ description, os, schedule_date = Date, created_by } = { email: '' }) => {
+
+    const serviceID = 'service_ad794bs',
+        templateID = 'template_yafly1j',
+        publicKey = '8EBDX2D3IpzZPDVfh',
+        templateParams = {
+            to_name: 'Registro de Estoque',
+            from_name: created_by,
+            cc_email: '',
+            message: description,
+            os, schedule_date: schedule_date.toLocaleDateString(),
+            opening_date: new Date().toLocaleDateString()
+        }
+
+    emailjs.send(serviceID, templateID, templateParams, publicKey)
+        .then(res => {
+            console.log('Email enviado com sucesso: ', res.status)
+        }, err => {
+            console.err(err)
+        })
+
+}
+
 
 
 getData()

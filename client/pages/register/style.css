@@ -12,6 +12,7 @@ html {
     background-image: url('/src/img/image0.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+
 }
 
 body {
@@ -74,4 +75,9 @@ button:hover {
     cursor: pointer;
     background: var(--red);
     color: white;
+}
+
+
+input:valid{
+    border-color: #06f762;
 }

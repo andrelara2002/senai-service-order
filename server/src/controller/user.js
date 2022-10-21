@@ -64,11 +64,18 @@ router.put('/', (req, res) => {
 
 router.post('/', (req, res) => {
     const { username, password, email, name } = req.body || {}
-    console.table({ username, password, email, name })
 
-    user_model.create({ username, password, email, name })
-        .then(() => res.send('User Created'))
-        .catch(err => console.error(err))
+    user_model.find({ username })
+        .then(found => {
+            if (found.length == 0) user_model.create({ username, password, email, name })
+                .then(() => res.send({ response: 'USER CREATED' }))
+                .catch(err => console.error(err))
+            else {
+                res.send({ response: 'USUARIO JA CADASTRADO' })
+            }
+        })
+
+
 })
 
 router.post('/recover', (req, res) => {
