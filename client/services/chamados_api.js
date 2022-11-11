@@ -14,10 +14,23 @@ class ChamadosApi {
             .catch(err => response = [undefined, err])
 
         callback && callback(response)
-        return callback
+        return response
     }
 
-    createData = async ({ os, description, opening_date, schedule_date, created_by }, callback) => {
+    fetchAtrasados = async callback => {
+        let response = []
+
+        let headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+        await fetch(this.url + '/atrasados', { method: 'GET', headers })
+            .then(async res => res.json().then(parsed => response = [parsed, undefined]))
+            .catch(err => response = [undefined, err])
+
+        callback && callback(response)
+        return response
+    }
+
+    createData = async ({ os, description, opening_date, schedule_date, created_by, report_type }, callback) => {
         let response = []
 
         let headers = new Headers()
@@ -39,6 +52,7 @@ class ChamadosApi {
                 ending_date: undefined,
                 schedule_date: schedule,
                 status: 1,
+                report_type,
                 created_by
             })
         })

@@ -7,20 +7,26 @@ const mongoose = require('mongoose')
 const user_controller = require('./src/controller/user')
 const chamados_controller = require('./src/controller/chamados')
 
+const runTasks = require('./src/services/tasks/Tasker')
+
+
 console.clear()
 
-mongoose.connect('mongodb://localhost:27017')
+mongoose.connect('mongodb://127.0.0.1:27017')
     .then(() => {
         console.log('Connected to database');
+        /* runTasks() */
     })
-    .catch(() => {
+    .catch(err => {
         console.log('Connection to database failed');
+        console.error(err)
     })
 
 const app = express()
 const PORT = 8000
 
 let connected = 0;
+
 app.use(cors())
 app.use(bodyParser.json())
 

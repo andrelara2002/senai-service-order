@@ -14,7 +14,11 @@ const schema = new mongoose.Schema({
         - 3: finished 
         */
     },
-    created_by: String
+    created_by: String,
+    report_type: {
+        type: String,
+        required: true
+    }
 })
 
 const model = mongoose.model('chamados', schema)

@@ -11,6 +11,9 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    box-shadow: -2px 6px 56px -29px rgba(0, 0, 0, 0.38);
+    padding: .4rem 1rem;
+    background: #fff;
 }
 
 .user {
@@ -90,11 +93,6 @@ body {
     gap: 20px;
 }
 
-header {
-    box-shadow: -2px 6px 56px -29px rgba(0, 0, 0, 0.38);
-    padding: .4rem 1rem;
-    background: #fff;
-}
 
 header button {
     padding: .4rem 1rem;
@@ -114,6 +112,10 @@ header img {
     height: 100%;
 }
 
+#chamados {
+    padding-bottom: .1rem;
+}
+
 #report {
     max-height: 550px;
 }
@@ -126,10 +128,13 @@ header img {
 }
 
 .card {
-    background: white;
-    box-shadow: -2px 6px 56px -29px rgba(0, 0, 0, 0.38);
-    padding: 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 2rem;
 }
 
 h1 {
@@ -154,7 +159,9 @@ h1 {
 }
 
 input,
-textarea {
+textarea,
+select,
+.actions input {
     padding: 1rem;
     border-radius: .2rem;
 
@@ -169,6 +176,20 @@ input:focus-within,
 textarea:focus-within {
     outline: none;
     border-color: red;
+}
+
+input[type=search] {
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 200px;
+}
+
+input:focus-within {
+    max-width: 300px;
+    border-color: red;
+
 }
 
 label {
@@ -197,11 +218,26 @@ ul {
     gap: 10px;
     display: flex;
     flex-direction: column;
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: scroll;
     border: 1px solid #dedede28;
     padding: 1rem;
     border-radius: 10px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+
 }
 
 .item .header {
@@ -217,6 +253,9 @@ ul {
 .item {
     display: grid;
     grid-template-columns: 1fr 100fr;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid rgb(221, 221, 221);
 }
 
 .item:hover {
@@ -262,6 +301,12 @@ ul {
     max-width: 400px;
     background: white;
     gap: 20px;
+
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 
@@ -326,10 +371,29 @@ ul {
     padding: 5px 10px;
 }
 
-.notification button:hover{
+.notification button:hover {
     border-color: white;
 }
 
-.notification.hidden, .hidden{
+.notification.hidden,
+.hidden {
     display: none;
+}
+
+.warning {
+    animation-name: warning_blink;
+    animation-duration: 2s;
+    animation-direction: normal;
+    animation-iteration-count: infinite;
+}
+
+
+@keyframes warning_blink {
+    0% {
+        border-color: yellow;
+    }
+
+    100% {
+        border-color: red;
+    }
 }

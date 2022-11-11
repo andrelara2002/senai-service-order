@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="/services/chamados_api.js"></script>
     <script src="./index.js" defer></script>
     <title>Chamados</title>
@@ -15,6 +15,10 @@
 <body>
     <header>
         <img src="/src/img/senai.jpeg" alt="">
+        <section class="actions">
+            <input type="search" placeholder="Pesquisar" id="search_bar">
+            <input type="date" name="" id="date_input">
+        </section>
         <div class="user">
             <strong>Olá, </strong>
             <p id="username">2020010</p>
@@ -37,10 +41,20 @@
                     <label>Descrição</label>
                     <textarea id="descricao_chamado" placeholder="Digitar descrição do chamado"></textarea>
                 </div>
-                <div class="question">
-                    <label>Data Programada</label>
-                    <input id="report_date" type="date">
-                </div>
+                <section class="details">
+                    <div class="question">
+                        <label>Tipo de requisição</label>
+                        <select id="report_type">
+                            <option value="mobiliario">Mobiliário</option>
+                            <option value="predial">Predial</option>
+                            <option value="materia_prima">Matéria prima</option>
+                        </select>
+                    </div>
+                    <div class="question">
+                        <label>Data Programada</label>
+                        <input id="report_date" type="date">
+                    </div>
+                </section>
                 <button id="create_chamado">Abrir chamado</button>
             </div>
         </section>

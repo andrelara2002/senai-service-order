@@ -1,6 +1,5 @@
 const userApi = new UserApi()
 
-
 const submit_button = document.getElementById('button_cadastrar')
 
 const username_input = document.getElementById('username')
@@ -21,14 +20,16 @@ submit_button && submit_button.addEventListener('click', () => {
         async res => {
             const [response, error] = res
 
+            if (error) {
+                alert('Erro de conexão com servidor, tente novamente mais tarde')
+                window.location.href = '/pages/error/error.html'
+                return
+            }
+
             let response_ = await response.json()
             response_ = response_.response
-            console.log(response_)
 
-            if (error) {
-                console.error(error)
-            }
-            else if (response_ == 'USUARIO JA CADASTRADO') {
+            if (response_ == 'USUARIO JA CADASTRADO') {
                 alert('Usuario ja cadastrado')
             }
             else {

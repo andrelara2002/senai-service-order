@@ -2,16 +2,34 @@ const chamadosApi = new ChamadosApi()
 
 
 let _data_ = []
+let query = ''
 let new_data = []
 let user = undefined
 let update_count = 0
+
+let pending = []
+
+const type_fields = [
+    ['mobiliario', 'Mobiliário'],
+    ['predial', 'Predial'],
+    ['materia_prima', 'Matéria Prima ']
+]
 
 const descricao_chamado = document.getElementById('descricao_chamado')
 const create_chamado = document.getElementById('create_chamado')
 const lista_chamados = document.getElementById('lista_chamados')
 const report_date = document.getElementById('report_date')
+const report_type = document.getElementById('report_type')
 
+const date_input = document.getElementById('date_input')
+
+const search_bar = document.getElementById('search_bar')
 const chamado_button = document.getElementById('chamado_button')
+
+search_bar.addEventListener('change', e => {
+    query = e.target.value
+    getData()
+})
 
 create_chamado.addEventListener('click', () => {
     let possible_date = new Date()
@@ -21,7 +39,8 @@ create_chamado.addEventListener('click', () => {
         description: descricao_chamado.value,
         os: _data_.length,
         schedule_date: report_date.value || possible_date,
-        created_by: user.username
+        created_by: user.username,
+        report_type: report_type.value
     }, res => {
         sendEmail({
             description: descricao_chamado.value,
@@ -80,6 +99,15 @@ const popup = data => {
                 <label>Data prevista</label>
                 <input type='date' value='${parseDate(data.schedule_date)}'></input>
             </div>
+            <div class='question'>
+                <label>Tipo da requisição</label>
+                <select>
+                   ${type_fields?.map(key => {
+        const [value, name] = key
+        return `<option ${value == data.report_type ? 'selected' : ''}>${name}</option>`
+    }).join('')} 
+                </select>
+            </div>
         </div>
         <div class='buttons ${data.created_by == user.username ? '' : 'hidden'}' >
         <button onclick=''>Excluir chamado</button>
@@ -102,9 +130,25 @@ const getData = async (callback) => {
 
     document.getElementById('username').innerText = user.name
 
+    chamadosApi.fetchAtrasados(res => {
+        const [data, error] = res
+        if (error) return
+
+        let alert_ = false
+
+        data?.map(value => {
+            const found = pending.find(x => x._id === value._id)
+            if (!found) alert_ = true
+        })
+
+        alert_ && alert('Você tem pedidos pendentes')
+
+        pending = [...pending, ...data]
+    })
+
     chamadosApi.fetchData(res => {
 
-        const [data, error] = res
+        let [data, error] = res
 
         if (error) { console.error(error); return }
 
@@ -117,6 +161,18 @@ const getData = async (callback) => {
 
         _data_ = data
 
+        data = data.filter(x =>
+            date_input.value
+                ? new Date(x.schedule_date).getMonth() == new Date(date_input.value).getMonth()
+                : true)
+
+        const search = new RegExp(query, 'i')
+        data = data.filter(
+            x => x.os?.match(search)
+                || x.report_type?.match(search)
+                || x.description?.match(search)
+        )
+
         lista_chamados.innerHTML = ''
 
         if (data.length == 0) {
@@ -125,10 +181,16 @@ const getData = async (callback) => {
 
         data.map((value, index) => {
             const row = document.createElement('div')
+
+            const found = pending.find(x => x._id === value._id)
+
+
             const id = value._id
 
             row.className += 'item'
             row.id = id
+
+            if (found) row.className += ' warning'
             let status
 
             switch (value.status) {
@@ -191,7 +253,7 @@ const sendEmail = ({ description, os, schedule_date = Date, created_by } = { ema
             from_name: created_by,
             cc_email: '',
             message: description,
-            os, schedule_date: schedule_date.toLocaleDateString(),
+            os, schedule_date: schedule_date ? new Date(schedule_date).toLocaleDateString() : '',
             opening_date: new Date().toLocaleDateString()
         }
 

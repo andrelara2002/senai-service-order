@@ -23,22 +23,7 @@ body {
     align-items: center;
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
 
-    background: white;
-
-    width: 100%;
-    max-width: 400px;
-
-    gap: 20px;
-
-    border: 1px solid #f3f3f3;
-    border-radius: 10px;
-    padding: 2rem;
-    box-shadow: -2px 6px 56px -29px rgba(0, 0, 0, 0.38);
-}
 
 .question {
     display: flex;
