@@ -64,6 +64,14 @@ const closePopup = () => {
     body.removeChild(document.getElementById('update_popup'))
 }
 
+
+const deleteChamado = async (id) => {
+    const [response, error] = await chamadosApi.deleteData(id)
+    if (error) { alert('Erro ao excluir chamado, tente novamente mais tarde'); return }
+
+    closePopup()
+}
+
 const parseDate = (value) => {
 
     const date = new Date(value)
@@ -110,7 +118,7 @@ const popup = data => {
             </div>
         </div>
         <div class='buttons ${data.created_by == user.username ? '' : 'hidden'}' >
-        <button onclick=''>Excluir chamado</button>
+        <button onclick='deleteChamado("${data._id}")'>Excluir chamado</button>
             <button class='finished'>${data.status !== 3 ? 'Finalizar chamado' : 'Atualizar chamado'}</button>
         </div>
         <button onclick='closePopup()'>Cancelar</button>

@@ -30,6 +30,43 @@ class ChamadosApi {
         return response
     }
 
+    updateData = async ({ id, os, description, opening_date, schedule_date, created_by, report_type }, callback) => {
+        let response = []
+
+        let headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+
+        await fetch(this.url, {
+            method: 'PATCH', headers,
+            body: JSON.stringify({ id, os, description, opening_date, schedule_date, created_by, report_type })
+        })
+            .then(async res => res.json().then(parsed => response = [parsed, undefined]))
+            .catch(err => response = [undefined, err])
+
+        callback && callback(response)
+        return response
+    }
+
+    deleteData = async (id, callback) => {
+        let response = []
+
+        let headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+
+        await fetch(this.url, {
+            method: 'DELETE', headers,
+            body: JSON.stringify({
+                id,
+            })
+        })
+            .then(async res => res.json().then(parsed => response = [parsed, undefined]))
+            .catch(err => response = [undefined, err])
+
+        callback && callback(response)
+        return response
+    }
+
+
     createData = async ({ os, description, opening_date, schedule_date, created_by, report_type }, callback) => {
         let response = []
 

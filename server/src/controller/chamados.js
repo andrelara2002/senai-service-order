@@ -78,4 +78,51 @@ router.post('/', (req, res) => {
     })
 })
 
+router.patch('/', (req, res) => {
+    const {
+        id,
+        os,
+        description,
+        opening_date,
+        schedule_date,
+        ending_date,
+        status, created_by,
+        report_type
+    } = req.body
+
+    chamados_model.findByIdAndUpdate(id, {
+        os, description,
+        opening_date,
+        schedule_date,
+        ending_date,
+        status,
+        created_by,
+        report_type
+    }, (err, response) => {
+        if (err) {
+            console.error(err)
+            res.send(err)
+        }
+        else {
+            res.send(response)
+        }
+    })
+})
+
+router.delete('/', (req, res) => {
+    const {
+        id,
+    } = req.body
+
+    chamados_model.findByIdAndDelete(id, (err, response) => {
+        if (err) {
+            console.error(err)
+            res.send(err)
+        }
+        else {
+            res.send(response)
+        }
+    })
+})
+
 module.exports = router
