@@ -246,18 +246,22 @@ ul {
 }
 
 .item .header {
-    border: 1px solid #dedede28;
     border-radius: .2rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     padding: .4rem;
+
+    width: 100%;
+    gap: 20px;
 }
 
 .item {
-    display: grid;
-    grid-template-columns: 1fr 100fr;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
     border-radius: 10px;
     padding: 10px;
     border: 1px solid rgb(221, 221, 221);
@@ -406,6 +410,23 @@ ul {
     animation-iteration-count: infinite;
 }
 
+
+.code img {
+    width: 100px;
+    height: auto;
+}
+
+.content .status{
+    height: 10px;
+    width: 10px;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
 
 @keyframes warning_blink {
     0% {

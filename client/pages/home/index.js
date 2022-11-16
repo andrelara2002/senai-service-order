@@ -274,10 +274,15 @@ const getData = async (callback) => {
             }
 
             row.innerHTML += `
-                <div class='status ${status}'></div>
-                <div class='header'>
-                    <div class='texts'><strong>Ordem de serviço: </strong> <p>${value._id}</p></div>
-                    <strong>${new Date(value.opening_date).toLocaleDateString()}</strong>
+                <div class='code'><img src='https://barcodeapi.org/api/auto/${value._id}'></img></div>
+                <div class='content'>
+                    <div class='status ${status}'></div>
+
+                    
+                    <div class='header'>
+                        <div class='texts'><strong>Ordem de serviço: </strong> <p>${value._id}</p></div>
+                        <strong>${new Date(value.opening_date).toLocaleDateString()}</strong>
+                    </div>
                 </div>
                 
             `
