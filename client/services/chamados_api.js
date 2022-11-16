@@ -30,7 +30,7 @@ class ChamadosApi {
         return response
     }
 
-    updateData = async ({ id, os, description, opening_date, schedule_date, created_by, report_type }, callback) => {
+    updateData = async ({ id, os, description, opening_date, schedule_date, created_by, report_type, status }, callback) => {
         let response = []
 
         let headers = new Headers()
@@ -38,7 +38,7 @@ class ChamadosApi {
 
         await fetch(this.url, {
             method: 'PATCH', headers,
-            body: JSON.stringify({ id, os, description, opening_date, schedule_date, created_by, report_type })
+            body: JSON.stringify({ id, os, description, opening_date, schedule_date, created_by, report_type, status })
         })
             .then(async res => res.json().then(parsed => response = [parsed, undefined]))
             .catch(err => response = [undefined, err])

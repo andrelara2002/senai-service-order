@@ -31,17 +31,18 @@ search_bar.addEventListener('change', e => {
     getData()
 })
 
-create_chamado.addEventListener('click', () => {
+create_chamado.addEventListener('click', async () => {
     let possible_date = new Date()
     possible_date.setDate(possible_date.getDate() + 15)
 
-    chamadosApi.createData({
+    await chamadosApi.createData({
         description: descricao_chamado.value,
         os: _data_.length,
         schedule_date: report_date.value || possible_date,
         created_by: user.username,
         report_type: report_type.value
     }, res => {
+        getData()
         sendEmail({
             description: descricao_chamado.value,
             os: _data_.length,
@@ -52,6 +53,41 @@ create_chamado.addEventListener('click', () => {
         report_date.value = ''
     })
 })
+
+const updateChamado = async (id) => {
+    const descricao = document.getElementById('descricao')?.value
+    const data_abertura = document.getElementById('data_abertura')?.value
+    const data_prevista = document.getElementById('data_prevista')?.value
+    const tipo_requisicao = document.getElementById('tipo_requisicao')?.value
+
+    const [response, error] = await chamadosApi.updateData({
+        id,
+        description: descricao,
+        report_type: tipo_requisicao,
+        opening_date: data_abertura,
+        schedule_date: data_prevista
+    })
+
+    if (error) {
+        alert('Erro ao atualizar dados, tente novamente mais tarde')
+        return
+    }
+
+    closePopup()
+    getData()
+}
+
+const closeChamado = async (id) => {
+    const [response, error] = await chamadosApi.updateData({ id, status: 3 })
+
+    if (error) {
+        alert('Erro chamado cadastro, tente novamente mais tarde')
+        return
+    }
+
+    closePopup()
+    getData()
+}
 
 document.getElementById('exit_button').addEventListener('click', () => {
     localStorage.removeItem('user')
@@ -70,6 +106,7 @@ const deleteChamado = async (id) => {
     if (error) { alert('Erro ao excluir chamado, tente novamente mais tarde'); return }
 
     closePopup()
+    getData() 
 }
 
 const parseDate = (value) => {
@@ -89,6 +126,21 @@ const popup = data => {
     const update_popup = document.createElement('span')
     const background = document.createElement('div')
 
+    let status
+
+    switch (data.status) {
+        case 1:
+            status = 'Aberto'
+            break
+        case 2:
+            status = 'Em progresso'
+            break
+        default:
+            status = 'Finalizado'
+            break
+
+    }
+
     background.className = 'background'
     update_popup.id = 'update_popup'
 
@@ -96,30 +148,35 @@ const popup = data => {
     
         <div class='question'>
             <label>Descrição</label>
-            <textarea >${data.description || "Nenhuma descrição"}</textarea>
+            <textarea id='descricao'>${data.description || "Nenhuma descrição"}</textarea>
         </div>
         <div class='dates'>
             <div class='question'>
                 <label>Data abertura</label>
-                <input type='date' value='${parseDate(data.opening_date)}'></input>
+                <input id='data_abertura' type='date' value='${parseDate(data.opening_date)}'></input>
             </div>
             <div class='question'>
                 <label>Data prevista</label>
-                <input type='date' value='${parseDate(data.schedule_date)}'></input>
+                <input id='data_prevista' type='date' value='${parseDate(data.schedule_date)}'></input>
             </div>
             <div class='question'>
                 <label>Tipo da requisição</label>
-                <select>
+                <select id='tipo_requisicao'>
                    ${type_fields?.map(key => {
         const [value, name] = key
         return `<option ${value == data.report_type ? 'selected' : ''}>${name}</option>`
     }).join('')} 
                 </select>
             </div>
+            <div class='question'>
+                <label>Status</label>
+                <input type='text' disabled value='${status}'></input>
+            </div>
         </div>
         <div class='buttons ${data.created_by == user.username ? '' : 'hidden'}' >
         <button onclick='deleteChamado("${data._id}")'>Excluir chamado</button>
-            <button class='finished'>${data.status !== 3 ? 'Finalizar chamado' : 'Atualizar chamado'}</button>
+        <button onclick='updateChamado("${data._id}")'>Atualizar chamado</button>
+        <button onclick='closeChamado("${data._id}")' ${data.status !== 3 ? '' : 'hidden'} class='finished'>Finalizar chamado</button>
         </div>
         <button onclick='closePopup()'>Cancelar</button>
     `
@@ -219,7 +276,7 @@ const getData = async (callback) => {
             row.innerHTML += `
                 <div class='status ${status}'></div>
                 <div class='header'>
-                    <div class='texts'><strong>Ordem de serviço: </strong> <p>${value.os}</p></div>
+                    <div class='texts'><strong>Ordem de serviço: </strong> <p>${value._id}</p></div>
                     <strong>${new Date(value.opening_date).toLocaleDateString()}</strong>
                 </div>
                 
@@ -277,4 +334,4 @@ const sendEmail = ({ description, os, schedule_date = Date, created_by } = { ema
 
 
 getData()
-setInterval(getData, 1000)
+setInterval(getData, 15 * 1000)
