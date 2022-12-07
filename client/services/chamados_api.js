@@ -85,7 +85,7 @@ class ChamadosApi {
             body: JSON.stringify({
                 os: os ? os : '00',
                 description: description ? description : "Nenhuma",
-                opening_date: new Date(),
+                opening_date: opening_date ? opening_date : new Date(),
                 ending_date: undefined,
                 schedule_date: schedule,
                 status: 1,

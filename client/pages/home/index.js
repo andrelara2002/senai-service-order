@@ -52,12 +52,24 @@ date_input?.addEventListener('change', () => { getData() })
 
 create_chamado?.addEventListener('click', async () => {
     let possible_date = new Date()
+
     possible_date.setDate(possible_date.getDate() + 15)
+
+
+    let string_date = report_date.value
+
+
+    if (string_date) {
+        const [_year, _month, _day] = string_date.split('-')
+        string_date = `${_year}-${_month}-${parseInt(_day)}`
+    }
+
 
     await chamadosApi.createData({
         description: descricao_chamado.value,
         os: _data_.length,
-        schedule_date: report_date.value || possible_date,
+        schedule_date: report_date.value ? string_date : possible_date,
+        ...report_date.value && { opening_date: string_date },
         created_by: user.username,
         report_type: report_type.value
     }, res => {
