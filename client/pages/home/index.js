@@ -31,7 +31,10 @@ search_bar.addEventListener('change', e => {
     getData()
 })
 
-create_chamado.addEventListener('click', async () => {
+
+date_input?.addEventListener('change', () => { getData() })
+
+create_chamado?.addEventListener('click', async () => {
     let possible_date = new Date()
     possible_date.setDate(possible_date.getDate() + 15)
 
@@ -102,11 +105,15 @@ const closePopup = () => {
 
 
 const deleteChamado = async (id) => {
+
+    if (!confirm('Você deseja realmente excluir esse chamado?')) return
+
+
     const [response, error] = await chamadosApi.deleteData(id)
     if (error) { alert('Erro ao excluir chamado, tente novamente mais tarde'); return }
 
     closePopup()
-    getData() 
+    getData()
 }
 
 const parseDate = (value) => {
@@ -228,7 +235,7 @@ const getData = async (callback) => {
 
         data = data.filter(x =>
             date_input.value
-                ? new Date(x.schedule_date).getMonth() == new Date(date_input.value).getMonth()
+                ? new Date(x.schedule_date).getMonth() == date_input.value?.split('-')[1]
                 : true)
 
         const search = new RegExp(query, 'i')
