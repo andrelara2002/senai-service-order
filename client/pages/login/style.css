@@ -9,7 +9,7 @@ html {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    background-image: url('/src/img/image0.jpg');
+    background-image: url('../../src/img/image0.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -76,13 +76,12 @@ button:hover {
     color: white;
 }
 
-a{
+a {
     text-align: center;
 }
 
-.buttons{
+.buttons {
     display: flex;
     flex-direction: column;
-    gap: 10px
-    ;
+    gap: 10px;
 }
