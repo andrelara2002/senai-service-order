@@ -26,6 +26,22 @@ const date_input = document.getElementById('date_input')
 const search_bar = document.getElementById('search_bar')
 const chamado_button = document.getElementById('chamado_button')
 
+
+const toIsoString = date_string => {
+    if (!date_string) return
+
+
+    const [year, month, day] = date_string.split('-')
+
+    const _year = year.padStart(4, '0')
+    const _month = month.padStart(2, '0')
+    const _day = day.padStart(2, '0')
+
+
+    return `${_year}-${_month}-${_day}`
+
+}
+
 search_bar.addEventListener('change', e => {
     query = e.target.value
     getData()
@@ -58,10 +74,14 @@ create_chamado?.addEventListener('click', async () => {
 })
 
 const updateChamado = async (id) => {
-    const descricao = document.getElementById('descricao')?.value
-    const data_abertura = document.getElementById('data_abertura')?.value
-    const data_prevista = document.getElementById('data_prevista')?.value
-    const tipo_requisicao = document.getElementById('tipo_requisicao')?.value
+
+    const found = _data_.find(x => x._id == id)
+
+
+    const descricao = document.getElementById('descricao')?.value || found.description
+    const data_abertura = document.getElementById('data_abertura')?.value || found.opening_date
+    const data_prevista = document.getElementById('data_prevista')?.value || found.data_prevista
+    const tipo_requisicao = document.getElementById('tipo_requisicao')?.value || found.report_type
 
     const [response, error] = await chamadosApi.updateData({
         id,
@@ -76,8 +96,10 @@ const updateChamado = async (id) => {
         return
     }
 
-    closePopup()
-    getData()
+    else {
+        closePopup()
+        getData()
+    }
 }
 
 const closeChamado = async (id) => {
@@ -160,11 +182,11 @@ const popup = data => {
         <div class='dates'>
             <div class='question'>
                 <label>Data abertura</label>
-                <input id='data_abertura' type='date' value='${parseDate(data.opening_date)}'></input>
+                <input id='data_abertura' type='date' value='${new Date(data.opening_date).toISOString().slice(0, 10)}'></input>
             </div>
             <div class='question'>
                 <label>Data prevista</label>
-                <input id='data_prevista' type='date' value='${parseDate(data.schedule_date)}'></input>
+                <input id='data_prevista' type='date' value='${new Date(data.schedule_date).toISOString().slice(0, 10)}'></input>
             </div>
             <div class='question'>
                 <label>Tipo da requisição</label>
@@ -233,9 +255,10 @@ const getData = async (callback) => {
 
         _data_ = data
 
+
         data = data.filter(x =>
             date_input.value
-                ? new Date(x.schedule_date).getMonth() == date_input.value?.split('-')[1]
+                ? new Date(x.schedule_date).getMonth() + 1 == date_input.value?.split('-')[1]
                 : true)
 
         const search = new RegExp(query, 'i')
@@ -248,7 +271,7 @@ const getData = async (callback) => {
         lista_chamados.innerHTML = ''
 
         if (data.length == 0) {
-            lista_chamados.innerHTML = '<strong>Nenum registro encontrado</strong>'
+            lista_chamados.innerHTML = '<strong>Nenhum registro encontrado</strong>'
         }
 
         data.map((value, index) => {
