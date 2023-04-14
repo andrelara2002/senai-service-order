@@ -1,9 +1,0 @@
-{
-  "name": "server_email",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "nodemailer": "^6.8.0"
-  }
-}
